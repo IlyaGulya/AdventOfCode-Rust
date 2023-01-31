@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 #[derive(Clone, Debug, PartialEq, Copy)]
 pub enum Move {
     ROCK,
@@ -5,16 +7,25 @@ pub enum Move {
     SCISSORS,
 }
 
-impl Move {
-    pub fn by_str(string: &str) -> Move {
-        match string {
+#[derive(Debug)]
+pub struct UnknownMove(String);
+
+impl FromStr for Move {
+    type Err = UnknownMove;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let result = match s {
             "A" => Move::ROCK,
             "B" => Move::PAPER,
             "C" => Move::SCISSORS,
-            _ => panic!("Unknown move {}", string)
-        }
-    }
+            _ => return Err(UnknownMove(s.to_owned()))
+        };
 
+        Ok(result)
+    }
+}
+
+impl Move {
     pub fn losing_move(opponent_move: Move) -> Move {
         match opponent_move {
             Move::ROCK => Move::SCISSORS,

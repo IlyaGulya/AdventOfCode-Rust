@@ -1,6 +1,7 @@
 extern crate core;
 
 use std::fs;
+use std::str::FromStr;
 use outcome::Outcome;
 use mv::Move;
 use round::Round;
@@ -32,8 +33,8 @@ fn parse_strategies(input: String) -> Vec<Strategy> {
                 line.split_once(" ")
                     .expect("Only two items per row is allowed!");
 
-            let opponent_move = Move::by_str(opponent_move);
-            let my_outcome = result::Result::by_str(my_strategy);
+            let opponent_move = Move::from_str(opponent_move).unwrap();
+            let my_outcome = result::Result::from_str(my_strategy).unwrap();
 
             Strategy {
                 opponent_move,
